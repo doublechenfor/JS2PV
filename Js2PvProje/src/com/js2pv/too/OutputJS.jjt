@@ -1,0 +1,520 @@
+/**
+ * JJTree template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */options{
+  VISITOR = true;
+   }
+PARSER_BEGIN(OutputJS)
+package com.js2pv.too;
+
+public class OutputJS extends JFrame{
+  public OutputJS(){
+	Container c=getContentPane();
+    c.setLayout(new BorderLayout(5,5));
+    JPanel jp1=new JPanel();
+    JTextArea jt=new JTextArea(50,50);
+    JScrollPane js=new JScrollPane(jt);
+    jp1.setLayout(new GridLayout(2,2,5,5));	   
+    JButton bt1=new JButton("导入文件");
+    JButton bt2=new JButton("生成PV语言");
+    JButton bt3=new JButton("生成pv语言语法树");
+    JButton bt4=new JButton("生成文件");
+    jp1.add(bt1);
+    jp1.add(bt2);
+    jp1.add(bt3);
+    jp1.add(bt4);	  
+    c.add(jp1,BorderLayout.NORTH);
+    c.add(js,BorderLayout.CENTER);
+	setTitle("borderLayout");
+    setSize(400,400);
+    setVisible(true);
+    setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);  
+	bt2.addActionListener(new ActionListener() {
+		@Override
+	    public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			try {
+			bt2dostr();
+			}catch(IOException e1) {
+				e1.printStackTrace();
+				}}
+	public void bt2dostr() throws IOException {
+			jt.setText(" ");
+			File file=new File("F:\\eclipse\\eclipse\\eclipse-workspace\\Js2PvProje\\src\\com\\js2pv\\too\\output2.txt");
+			try {
+				FileReader fr=new FileReader(file);
+				BufferedReader bis=new BufferedReader(fr);
+				char[] c=new char[50];
+				int len;
+				while((len=bis.read(c))!=-1) {
+					String str=new String(c,0,len);
+					jt.setText(str);								
+				}				
+				fr.close();	
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}		
+	});
+    bt1.addActionListener(new ActionListener () {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+	    bt1getstr(); 
+	    }			
+	public void bt1getstr() {
+			// TODO Auto-generated method stub    	
+		File file=new File("\\eclipse\\eclipse\\eclipse-workspace\\Js2PvProje\\src\\com\\js2pv\\too\\output1.txt");
+			try {
+				FileReader fr=new FileReader(file);
+				BufferedReader bis=new BufferedReader(fr);
+				char[] c=new char[50];
+				int len;
+				while((len=bis.read(c))!=-1) {
+					String str=new String(c,0,len);
+					jt.setText(str);						
+				}				
+				fr.close();	
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} 
+	});	    
+  }
+public InputStream openfile() {			
+	File file=new File("\\eclipse\\eclipse\\eclipse-workspace\\Js2PvProje\\src\\com\\js2pv\\too\\output1.txt");
+		try {
+			FileReader fr=new FileReader(file);
+			BufferedReader bis=new BufferedReader(fr);
+			char[] c=new char[50];
+			int len;
+			while((len=bis.read(c))!=-1) {
+				String str=new String(c,0,len);
+				InputStream incode=new ByteArrayInputStream(str.getBytes());   
+				return incode;						
+			}				
+			fr.close();	  
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return null;
+	} 	 
+  
+  public static void main(String args[]) {
+	  new OutputJS(new OutputJS().openfile());
+    try {
+      SimpleNode n = OutputJS.Start();           
+      StringBuffer s=new StringBuffer("the input is:");
+      String str=n.jjtAccept(new OutputVisitor(),s).toString();     
+  	 File file=new File("\\eclipse\\eclipse\\eclipse-workspace\\Js2PvProje\\src\\com\\js2pv\\too\\output2.txt");
+  	 FileWriter fw =new FileWriter(file);
+  	 BufferedWriter bw=new BufferedWriter(fw);
+       bw.write(str);
+       bw.flush();
+       bw.close();
+      System.out.println("Thank you.");
+   }catch (Exception e) {
+      System.out.println("Oops.");
+      System.out.println(e.getMessage());
+    }
+    }
+}
+PARSER_END(OutputJS)
+SKIP : 
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+| "\f"
+}
+
+TOKEN :
+{
+  < BOOLEAN: "boolean" >
+| < CONTINUE: "continue" >
+| < _DEFAULT: "default" >
+| < FUNCTION: "function" > 
+| < PUBLIC: "public" >
+| < RETURN: "return" >
+| < VAR: "var">
+| < IN: "in">
+| < LET: "let">
+| <IF:"if">
+| <THEN:"then">
+| <ELSE:"else">
+| <OUT:"out">
+| <EVENT:"event">
+| <FUN:"fun">
+| <REDUC:"reduc">
+| <New:"new">
+| <NULL:"NULL">
+}
+
+
+TOKEN : /* IDENTIFIERS */
+{
+ <ident:  <LETTER> (<LETTER>|<DIGIT>)* >
+ |  < LETTER: ["_","a"-"z","A"-"Z"] >
+ |  < DIGIT: ["0"-"9"] >
+} 
+
+TOKEN : /* OPERATORS */
+{
+  < PLUS : "+" >
+| < MINUS : "-" >
+| < MUL : "*" >
+| < DIV : "/" >
+| < EQU : "=" >
+| < SEMICOLON : ";" >
+| < LP : "(" >
+| < RP : ")" >
+| < EQ : "==">
+| < NOTEQ : "!=">
+| < LT : "< ">
+| < SMALLEQ : "<=">
+| < NEQ : "<>">
+| < OR : "||">
+| < AND : "&&">
+| < ISTO : "==>">
+| < IMPLY : "->">
+| < BIGEQ : ">=">
+| < POINT:".">
+| < YINHAO:"^">
+| < COMMA : "," >
+| < LB: "[">
+| < RB: "]">
+| < OBRACE : "{" >  
+| < CBARCE : "}" > 
+}
+
+SimpleNode Start():{}
+{
+  process()
+  { return jjtThis; }
+}
+void process(): {}
+{             
+   varsub()newdefine()definemaohao()
+  |expstub()
+  |definefunction()newdefine()defineLP()newdefine()defineRP()defineOBRACE()funblock()defineCBARCE()
+  |defineeif()"("expstub()")"expstub()defineeelse()expstub()
+  //|definefunction()newdefine()"("expnum()")""{" "}"
+  //|request()"."defineopen()HTTPrequestopen()"\""(newdefine())?"\""")"definemaohao()request()"."HTTPrequestsend()definemaohao()
+}
+
+void exp(): {}
+ {
+  expstub()(defineeelor()|defineand())expstub()
+ }
+
+ void funblock(): { }
+ {
+  newobject()usefun()newsend()
+ }
+
+ void newobject(): { }
+ {
+  varsub()newdefine()definedengyu()defineNEW()newdefine()defineLP()defineRP()definemaohao() 
+  }
+    
+  void usefun(): { }
+  {
+  nomeat()yinword()defineCOMMA()yinwordpoint()defineRP()definemaohao()
+  }
+  void newsend(): { } {
+
+ newdefine()definepoint()newdefine()defineLP()newdefine()defineRP()definemaohao()
+    }
+
+void nomeat(): { }
+{
+  newdefine()definepoint()newdefine()defineLP()
+ }
+ void yinword(): { } 
+ {
+ defineyinhao()(newdefine())*defineyinhao()
+   }
+void yinwordpoint(): { } {
+  
+defineyinhao()(newdefine())*definepoint()(newdefine())*defineyinhao()
+
+    } 
+void expstub():{}
+{
+ (digitsub()|newdefine())(definedengyu()|definenotequal()|defineequal()|definebigger()|definesmaller())(digitsub()|newdefine())(definemaohao())?
+} 
+String digitsub() :
+{
+  Token token;
+}
+{
+  token = <DIGIT >
+  {
+    jjtn000.jjtSetValue(token.image);
+    return token.image;
+  }
+}
+void varsub() :
+{
+  Token token;
+}
+{
+  token = < VAR >
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+
+void newdefine() :
+{
+Token token;
+}
+{
+  token=<ident>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+
+void newdefinelet() :
+{
+Token token;
+}
+{
+  token=<LET>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+void newdefinein() :
+{
+Token token;
+}
+{
+  token=<IN>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+void defineeif() :
+{
+Token token;
+}
+{
+  token=<IF>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+void definemaohao() :
+{
+Token token;
+}
+{
+  token=<SEMICOLON>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+void defineethen() :
+{
+Token token;
+}
+{
+  token=<THEN>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+void defineeelse() :
+{
+Token token;
+}
+{
+  token=<ELSE>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+void defineeelor() :
+{
+Token token;
+}
+{
+  token=<OR>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+void defineand() :
+{
+Token token;
+}
+{
+  token=<AND>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+void definefunction() :
+{
+Token token;
+}
+{
+  token=<FUNCTION>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+void definedengyu() :
+{
+Token token;
+}
+{
+  token=<EQU>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+void defineequal() :
+{
+Token token;
+}
+{
+  token=<EQ>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+void definenull() :
+{
+Token token;
+}
+{
+  token=<NULL>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+void definenotequal() :
+{
+Token token;
+}
+{
+  token=<NOTEQ>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+void definebigger() :
+{
+Token token;
+}
+{
+  token=<BIGEQ>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+void definesmaller() :
+{
+Token token;
+}
+{
+  token=<SMALLEQ>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+void defineOBRACE() :
+{
+Token token;
+}
+{
+  token=<OBRACE>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+void defineCBARCE() :
+{
+Token token;
+}
+{
+  token=<CBARCE>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+void defineNEW() :
+{
+Token token;
+}
+{
+  token=<New>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+void defineyinhao() :
+{
+Token token;
+}
+{
+  token=<YINHAO>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+void definepoint() :
+{
+Token token;
+}
+{
+  token=<POINT>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+void defineLP() :
+{
+Token token;
+}
+{
+  token=<LP>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
+void defineRP() :
+{
+Token token;
+}
+{
+  token=<RP>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+} 
+void defineCOMMA() :
+{
+Token token;
+}
+{
+  token=<COMMA>
+  {
+    jjtn000.jjtSetValue(token.image);
+  }
+}
